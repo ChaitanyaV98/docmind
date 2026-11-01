@@ -1,5 +1,7 @@
 # DocMind
 
+[![CI](https://github.com/ChaitanyaV98/docmind/actions/workflows/ci.yml/badge.svg)](https://github.com/ChaitanyaV98/docmind/actions/workflows/ci.yml)
+
 Chat with your team's documents and get answers with exact source citations — built to **measure**
 answer quality and **enforce** who can see what, not just demo it.
 
