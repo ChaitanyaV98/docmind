@@ -1,0 +1,39 @@
+import { createGroq } from "@ai-sdk/groq";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import type { LanguageModel } from "ai";
+
+/**
+ * One place to choose the chat model. The rest of the app only sees `LanguageModel`,
+ * so switching providers is an env change, not a code change.
+ *
+ *  LLM_PROVIDER=groq   → Groq free tier (fast, strong; needs GROQ_API_KEY)
+ *  LLM_PROVIDER=ollama → a small local model through Ollama's OpenAI-compatible API
+ */
+export interface ChatModel {
+  model: LanguageModel;
+  /** Stable id used in cache keys and eval reports, e.g. "groq:llama-3.3-70b-versatile". */
+  id: string;
+}
+
+export function getChatModel(): ChatModel {
+  const provider = process.env.LLM_PROVIDER ?? "groq";
+
+  if (provider === "groq") {
+    if (!process.env.GROQ_API_KEY) {
+      throw new Error("GROQ_API_KEY is not set (or use LLM_PROVIDER=ollama for a local model)");
+    }
+    const name = process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile";
+    return { model: createGroq()(name), id: `groq:${name}` };
+  }
+
+  if (provider === "ollama") {
+    const ollama = createOpenAICompatible({
+      name: "ollama",
+      baseURL: `${process.env.OLLAMA_URL ?? "http://localhost:11434"}/v1`,
+    });
+    const name = process.env.OLLAMA_CHAT_MODEL ?? "qwen2.5:1.5b";
+    return { model: ollama.chatModel(name), id: `ollama:${name}` };
+  }
+
+  throw new Error(`Unknown LLM_PROVIDER "${provider}" — use "groq" or "ollama"`);
+}
