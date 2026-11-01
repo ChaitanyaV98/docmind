@@ -13,6 +13,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
 import { closeDb } from "@/db";
 import { answerQuestion, judgeFaithfulness } from "@/lib/answer";
+import { embeddingModelId } from "@/lib/embed";
 import { firstRelevantRank, missingFacts, scoreRetrieval, type RetrievalScores } from "@/lib/eval-metrics";
 import { getChatModel } from "@/lib/llm";
 import { citedSourceNumbers, NOT_FOUND_ANSWER } from "@/lib/prompt";
@@ -121,7 +122,7 @@ async function main() {
   // ---------- Report ----------
   const lines: string[] = [];
   lines.push(`# DocMind eval report`, ``);
-  lines.push(`${cases.length} golden cases · ${answerable.length} answerable · embeddings: ${process.env.EMBED_MODEL ?? "nomic-embed-text"}${modelId ? ` · answers: ${modelId}` : ""}`, ``);
+  lines.push(`${cases.length} golden cases · ${answerable.length} answerable · embeddings: ${embeddingModelId()}${modelId ? ` · answers: ${modelId}` : ""}`, ``);
   lines.push(`## Retrieval (top 5)`, ``);
   lines.push(`| Retriever | Recall@1 | Recall@3 | Recall@5 | MRR | Avg latency |`);
   lines.push(`|---|---|---|---|---|---|`);
