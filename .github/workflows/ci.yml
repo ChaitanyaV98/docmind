@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+        env:
+          AUTH_SECRET: ci-build-only-secret-not-used-at-runtime-xxxx
+
+  eval:
+    name: Access control + retrieval eval
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: docmind
+          POSTGRES_PASSWORD: docmind
+          POSTGRES_DB: docmind
+        ports: ["5434:5432"]
+        options: >-
+          --health-cmd "pg_isready -U docmind -d docmind"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    env:
+      DATABASE_URL: postgres://docmind_app:docmind_app@localhost:5434/docmind
+      DATABASE_ADMIN_URL: postgres://docmind:docmind@localhost:5434/docmind
+      OLLAMA_URL: http://localhost:11434
+      EMBED_MODEL: nomic-embed-text
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      - name: Install Ollama and the embedding model
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          (ollama serve > /tmp/ollama.log 2>&1 &)
+          for i in $(seq 1 30); do curl -sf localhost:11434/api/tags >/dev/null && break; sleep 1; done
+          ollama pull nomic-embed-text
+
+      - name: Create app role, migrate, seed
+        run: |
+          PGPASSWORD=docmind psql -h localhost -p 5434 -U docmind -d docmind -v ON_ERROR_STOP=1 -f docker/init.sql
+          npm run db:migrate
+          npm run seed
+
+      - name: Row-level security integration tests
+        run: npm run test:int
+
+      # Fails the build on any access-control leak or if hybrid recall@5 regresses below 95%.
+      - name: Retrieval eval
+        run: npm run eval -- --min-recall 0.95
+
+      - name: Answer eval (Groq, only when the GROQ_API_KEY secret is set)
+        if: env.GROQ_API_KEY != ''
+        env:
+          LLM_PROVIDER: groq
+        run: npm run eval -- --answers --judge
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: evals/report.md
