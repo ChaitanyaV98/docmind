@@ -4,6 +4,8 @@
 
 **Ask questions about your team's documents and get answers that point to exactly where they came from.**
 
+![DocMind demo: a question answered with a citation, its source passage opened, then an exact error-code lookup](docs/demo.gif)
+
 ## What is it?
 
 Teams keep knowledge in PDFs, handbooks and notes that nobody has time to search. DocMind lets you
@@ -137,7 +139,7 @@ scripts/     seed, ingest, search and eval command-line tools
 
 - [x] Upload, search, cited answers, access control, cache, evals in CI
 - [x] Deploy (Vercel + Neon + Upstash)
-- [ ] Demo GIF
+- [x] Demo GIF
 - [ ] Larger test set; better handling of follow-up questions
 
 ## Deployment
