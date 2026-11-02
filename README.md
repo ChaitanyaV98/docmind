@@ -17,7 +17,7 @@ get?"* or *"What does error ERR-5310 mean?"*
 - **People only see what they're allowed to.** Your private documents stay private, and shared documents are visible to the whole team.
 - **Its quality is measured, not guessed.** A test suite checks on every code change that it finds the right passages and never leaks private data.
 
-**Live demo: [docmind-ou2p.vercel.app](https://docmind-ou2p.vercel.app)**. Sign in as `alice@lumen.dev` or `bob@lumen.dev`, password `docmind-demo`.
+**Live demo: [docmind-chaitanya.vercel.app](https://docmind-chaitanya.vercel.app)**. Sign in as `alice@lumen.dev` or `bob@lumen.dev`, password `docmind-demo`.
 
 ## Results
 
