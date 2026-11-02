@@ -1,0 +1,31 @@
+{
+  "retrieval": {
+    "vector": {
+      "cases": 27,
+      "recallAt1": 1,
+      "recallAt3": 1,
+      "recallAt5": 1,
+      "mrr": 1,
+      "latencyMs": 1497.5151867407403
+    },
+    "keyword": {
+      "cases": 27,
+      "recallAt1": 0.7037037037037037,
+      "recallAt3": 0.8888888888888888,
+      "recallAt5": 0.8888888888888888,
+      "mrr": 0.7962962962962963,
+      "latencyMs": 719.9361959259259
+    },
+    "hybrid": {
+      "cases": 27,
+      "recallAt1": 0.9629629629629629,
+      "recallAt3": 0.9629629629629629,
+      "recallAt5": 1,
+      "mrr": 0.9703703703703703,
+      "latencyMs": 1471.142293185183
+    }
+  },
+  "leaks": 0,
+  "hybridMisses": [],
+  "answers": []
+}
