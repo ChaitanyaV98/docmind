@@ -15,7 +15,7 @@ get?"* or *"What does error ERR-5310 mean?"*
 - **People only see what they're allowed to.** Your private documents stay private, and shared documents are visible to the whole team.
 - **Its quality is measured, not guessed.** A test suite checks on every code change that it finds the right passages and never leaks private data.
 
-> **Status:** works end to end locally. Deployment (Vercel + Neon) is next.
+**Live demo: [docmind-ou2p.vercel.app](https://docmind-ou2p.vercel.app)**. Sign in as `alice@lumen.dev` or `bob@lumen.dev`, password `docmind-demo`.
 
 ## Results
 
@@ -25,7 +25,7 @@ get?"* or *"What does error ERR-5310 mean?"*
 | Answers correct, with a valid citation (or a correct refusal) | **97%** (30 of 31) |
 | Faithfulness to sources, graded by an LLM judge | **4.93 / 5** |
 | Private documents leaked to the wrong user | **0** (checked in CI) |
-| Repeated question, answered from cache | **~190 ms** (vs ~13 s uncached) |
+| Repeated question, answered from cache | **~0.6 s** live (vs ~2 s uncached); ~190 ms locally |
 
 ## How it works
 
@@ -84,6 +84,11 @@ answer in the documents, and checks that one user can't see another's private no
 | Keywords only (full-text) | 70% | 89% | 0.80 |
 | **Combined (RRF)** | 93% | **100%** | 0.95 |
 
+These numbers use local Ollama embeddings (`nomic-embed-text`). The live site uses Gemini
+(`gemini-embedding-001`, 768 dimensions) because Ollama can't run on serverless. Re-running the eval
+against the live database gives combined recall@5 **100%**, MRR **0.97** and **0** leaks; see
+[`evals/report-gemini.md`](evals/report-gemini.md).
+
 **Bugs the evals caught:**
 - Keyword search required *every* word to match, so normal questions found nothing. It now matches any word and ranks by relevance.
 - Too many search candidates on a small document set let a weak keyword match outrank the right answer. Fewer candidates fixed it (96% → 100%).
@@ -131,8 +136,26 @@ scripts/     seed, ingest, search and eval command-line tools
 ## Roadmap
 
 - [x] Upload, search, cited answers, access control, cache, evals in CI
-- [ ] Deploy (Vercel + Neon + Upstash) and demo GIF
+- [x] Deploy (Vercel + Neon + Upstash)
+- [ ] Demo GIF
 - [ ] Larger test set; better handling of follow-up questions
+
+## Deployment
+
+| Piece | Service (free tier) |
+|---|---|
+| App | Vercel, functions pinned to Singapore (`vercel.json`) next to the database |
+| Postgres + pgvector | Neon. The app connects as `docmind_app`, which cannot bypass row-level security |
+| Answer cache | Upstash Redis |
+| Embeddings / answers | Gemini / Groq |
+
+To deploy your own: create the `docmind_app` role and the `vector` extension (see `docker/init.sql`),
+run `npm run db:migrate` and `npm run seed` with `EMBED_PROVIDER=gemini`, then set `DATABASE_URL`,
+`REDIS_URL`, `AUTH_SECRET`, `EMBED_PROVIDER=gemini`, `GEMINI_API_KEY`, `LLM_PROVIDER=groq` and
+`GROQ_API_KEY` in Vercel.
+
+Free-tier limits: uploads over ~4.5 MB are rejected by Vercel, and the first request after the
+database has been idle takes about a second longer while Neon wakes up.
 
 ## License
 
