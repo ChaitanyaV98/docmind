@@ -2,6 +2,7 @@ import { generateText, Output } from "ai";
 import { z } from "zod";
 import { getChatModel } from "./llm";
 import { ANSWER_INSTRUCTIONS, buildGroundedPrompt, toSources, type Source } from "./prompt";
+import { normalizeAnswer } from "./normalize-answer";
 import { hybridSearch } from "./search";
 
 /**
@@ -19,7 +20,7 @@ export async function answerQuestion(
     prompt: buildGroundedPrompt(question, sources),
     temperature: 0,
   });
-  return { text: text.trim(), sources };
+  return { text: normalizeAnswer(text).trim(), sources };
 }
 
 const Judgement = z.object({

@@ -22,6 +22,8 @@ get?"* or *"What does error ERR-5310 mean?"*
 | What's measured | Result |
 |---|---|
 | Right passage found in the top 5 results (recall@5) | **100%** (27 questions) |
+| Answers correct, with a valid citation (or a correct refusal) | **97%** (30 of 31) |
+| Faithfulness to sources, graded by an LLM judge | **4.93 / 5** |
 | Private documents leaked to the wrong user | **0** (checked in CI) |
 | Repeated question, answered from cache | **~190 ms** (vs ~13 s uncached) |
 
@@ -42,7 +44,7 @@ Ask:     question ─► search as this user ─► top passages ─► LLM writ
 
 ## Tech stack
 
-Next.js 16 · TypeScript · PostgreSQL 17 + pgvector · Drizzle ORM · Vercel AI SDK · Groq / Ollama ·
+Next.js 16 · TypeScript · PostgreSQL 17 + pgvector · Drizzle ORM · Vercel AI SDK · Groq (gpt-oss-120b) / Ollama ·
 Redis · Vitest · GitHub Actions
 
 ## Run it locally
@@ -85,7 +87,22 @@ answer in the documents, and checks that one user can't see another's private no
 **Bugs the evals caught:**
 - Keyword search required *every* word to match, so normal questions found nothing. It now matches any word and ranks by relevance.
 - Too many search candidates on a small document set let a weak keyword match outrank the right answer. Fewer candidates fixed it (96% → 100%).
+- The model wrote citations as `【1】` and IDs with Unicode hyphens (`PLAT‑812`), so 11 correct answers failed the checks and showed no citation chips in the UI. Normalising the output took answers from 65% to 97%.
 - A logged-out request could see shared documents. An integration test caught this, and the database rule now fails closed.
+
+**Answers** (Groq `openai/gpt-oss-120b`, graded on facts, citations and refusals):
+
+| Question type | Passed |
+|---|---|
+| Reworded questions | 11/12 |
+| Direct questions | 8/8 |
+| Exact codes and commands | 5/5 |
+| Not in the documents (must refuse) | 2/2 |
+| Private notes and permission checks | 4/4 |
+
+The one failure is a useful catch: asked about annual leave, the model added up three numbers into
+a "46 days total" that no document states. Every fact was right, but the total was invented, and
+the LLM judge flagged it as unsupported.
 
 On this small document set, meaning-based search alone already finds everything. The keyword half
 is insurance for larger sets full of IDs and error codes, which a bigger test set will need to prove.

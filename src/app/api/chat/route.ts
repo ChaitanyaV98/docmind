@@ -9,6 +9,7 @@ import { z } from "zod";
 import { answerCacheKey, getCachedAnswer, setCachedAnswer } from "@/lib/cache";
 import { messageText, type ChatMessage, type ChatMeta } from "@/lib/chat-types";
 import { getChatModel } from "@/lib/llm";
+import { normalizeAnswer } from "@/lib/normalize-answer";
 import { ANSWER_INSTRUCTIONS, buildGroundedPrompt, toSources } from "@/lib/prompt";
 import { hybridSearch } from "@/lib/search";
 import { getSession } from "@/lib/session";
@@ -68,7 +69,7 @@ export async function POST(req: Request) {
     messages: [...history, { role: "user", content: buildGroundedPrompt(question, sources) }],
     temperature: 0, // factual Q&A: same question, same answer
     onEnd: async ({ text }) => {
-      if (cacheable && text) await setCachedAnswer(cacheKey, { text });
+      if (cacheable && text) await setCachedAnswer(cacheKey, { text: normalizeAnswer(text) });
     },
   });
 

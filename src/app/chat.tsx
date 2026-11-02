@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { messageText, type ChatMessage } from "@/lib/chat-types";
+import { normalizeAnswer } from "@/lib/normalize-answer";
 import type { Source } from "@/lib/prompt";
 
 const SUGGESTIONS = [
@@ -106,7 +107,7 @@ export function Chat({ firstName }: { firstName: string }) {
 function AssistantMessage({ message, streaming }: { message: ChatMessage; streaming: boolean }) {
   const [active, setActive] = useState<number | null>(null);
   const sources = message.metadata?.sources ?? [];
-  const text = messageText(message);
+  const text = normalizeAnswer(messageText(message));
   const cited = new Set([...text.matchAll(/\[(\d+)\]/g)].map((m) => Number(m[1])));
   const citedSources = sources.filter((s) => cited.has(s.n));
 

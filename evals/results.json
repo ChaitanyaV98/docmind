@@ -6,7 +6,7 @@
       "recallAt3": 1,
       "recallAt5": 1,
       "mrr": 0.9814814814814815,
-      "latencyMs": 88.91542111111109
+      "latencyMs": 41.82955707407409
     },
     "keyword": {
       "cases": 27,
@@ -14,7 +14,7 @@
       "recallAt3": 0.8888888888888888,
       "recallAt5": 0.8888888888888888,
       "mrr": 0.7962962962962963,
-      "latencyMs": 3.365884074074108
+      "latencyMs": 2.4882407777777527
     },
     "hybrid": {
       "cases": 27,
@@ -22,10 +22,257 @@
       "recallAt3": 0.9629629629629629,
       "recallAt5": 1,
       "mrr": 0.9518518518518518,
-      "latencyMs": 25.368109592592578
+      "latencyMs": 27.738458370370306
     }
   },
   "leaks": 0,
   "hybridMisses": [],
-  "answers": []
+  "answers": [
+    {
+      "id": "leave-annual",
+      "kind": "paraphrase",
+      "ok": false,
+      "problems": [
+        "judge: faithfulness 3/5"
+      ],
+      "faithfulness": 3,
+      "answer": "You receive 24 days of paid annual leave, 10 days of paid sick leave, and the company observes 12 paid public holidays each year, giving you a total of 46 paid days off annually [1][3][4]. Birthing parents also get 26 weeks of fully paid parental leave, while non-birthing parents receive 4 weeks of fully paid leave [6]."
+    },
+    {
+      "id": "leave-carry",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Yes—you may carry forward up to 8 unused annual leave days into the next calendar year, but they must be taken by 31 March or they will lapse[1]."
+    },
+    {
+      "id": "leave-sick",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Employees receive 10 days of paid sick leave per year [1]."
+    },
+    {
+      "id": "leave-doctor-note",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "You must provide a medical certificate (doctor’s note) if you are absent for more than 2 consecutive days, and you need to upload it to the HR portal within 7 days of returning to work [5]."
+    },
+    {
+      "id": "leave-maternity",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Birthing parents receive 26 weeks of fully paid parental leave[1]."
+    },
+    {
+      "id": "leave-father",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "A new father (non-birthing parent) is entitled to 4 weeks of fully paid parental leave, which can be taken in up to two blocks within the first 12 months after the birth or adoption [1]."
+    },
+    {
+      "id": "leave-holiday-work",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "If you must work on a public holiday, you receive a compensatory day off that must be taken within 60 days [1]."
+    },
+    {
+      "id": "leave-unpaid",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "You can request up to 30 days of unpaid leave per year [1]."
+    },
+    {
+      "id": "exp-hotel",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "The hotel reimbursement limit in metro cities is ₹6,000 per night [1]."
+    },
+    {
+      "id": "exp-own-car",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "You are reimbursed at ₹12 per kilometre for personal vehicle use [1]."
+    },
+    {
+      "id": "exp-meal-receipts",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "No, you do not need receipts for meals while traveling on business; the ₹1,500 per-day per-diem for meals is provided without requiring receipts[1]."
+    },
+    {
+      "id": "exp-alcohol",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Alcoholic drinks are not reimbursable, except when purchased at an approved client event [1]."
+    },
+    {
+      "id": "exp-deadline",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Expense claims must be submitted within 30 days of the expense being incurred [1][2]."
+    },
+    {
+      "id": "exp-home-office",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Yes. Remote employees get a one-time home-office allowance of ₹25,000 to cover a desk, chair and accessories [1]."
+    },
+    {
+      "id": "exp-learning",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Each employee receives an annual learning budget of ₹40,000 [1]."
+    },
+    {
+      "id": "oncall-4021",
+      "kind": "exact",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "ERR-4021 indicates that the payment provider’s webhook did not reach the orders service within 30 seconds; you should first check the provider’s webhook dashboard for an outage, and if the provider is healthy, restart the webhook-consumer deployment with `kubectl rollout restart deploy/webhook-consumer -n payments` — missed webhooks will be replayed automatically every 15 minutes by the reconciliation job [1]."
+    },
+    {
+      "id": "oncall-5310",
+      "kind": "exact",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "ERR-5310 means the API cannot obtain a database connection, indicating that the database connection pool is exhausted[1]."
+    },
+    {
+      "id": "oncall-ack",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "You must acknowledge a page within 5 minutes [2]."
+    },
+    {
+      "id": "oncall-stipend",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "On-call engineers receive a stipend of ₹4,000 per week[1]."
+    },
+    {
+      "id": "oncall-sev1",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "A SEV1 incident is when the product is down or data is at risk for all customers[1]."
+    },
+    {
+      "id": "oncall-postmortem",
+      "kind": "direct",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "A blameless postmortem must be completed within 5 working days after the incident [1]."
+    },
+    {
+      "id": "oncall-replay",
+      "kind": "paraphrase",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "No—you should not manually replay missed payment webhooks; they are automatically replayed by the reconciliation job every 15 minutes. [1]"
+    },
+    {
+      "id": "id-kubectl",
+      "kind": "exact",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Run the restart command for the webhook-consumer deployment:\n\n```bash\nkubectl rollout restart deploy/webhook-consumer -n payments\n``` \n\n[1]"
+    },
+    {
+      "id": "id-pg-stat",
+      "kind": "exact",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Use the view to find active queries, e.g.:\n\n```sql\nSELECT * \nFROM pg_stat_activity \nWHERE state = 'active' \nORDER BY query_start;\n``` \n\nThis helps identify long-running queries when ERR-5310 occurs [1]."
+    },
+    {
+      "id": "id-plat-812",
+      "kind": "exact",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "Ticket PLAT-812 was used to mute a flaky test in the checkout suite that was caused by a race condition in the cart-cache warm-up; it should remain muted until the fix in PR 2291 is merged[1]."
+    },
+    {
+      "id": "none-stock",
+      "kind": "unanswerable",
+      "ok": true,
+      "problems": [],
+      "answer": "I couldn't find that in your documents."
+    },
+    {
+      "id": "none-ceo",
+      "kind": "unanswerable",
+      "ok": true,
+      "problems": [],
+      "answer": "I couldn't find that in your documents."
+    },
+    {
+      "id": "private-own-alice",
+      "kind": "private",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "The flaky checkout test was muted with ticket PLAT-812[1]."
+    },
+    {
+      "id": "private-own-bob",
+      "kind": "private",
+      "ok": true,
+      "problems": [],
+      "faithfulness": 5,
+      "answer": "The Q4 travel budget for the platform team is ₹6,50,000 [1]."
+    },
+    {
+      "id": "rls-bob-cannot-see-alice",
+      "kind": "permission",
+      "ok": true,
+      "problems": [],
+      "answer": "I couldn't find that in your documents."
+    },
+    {
+      "id": "rls-alice-cannot-see-bob",
+      "kind": "permission",
+      "ok": true,
+      "problems": [],
+      "answer": "I couldn't find that in your documents."
+    }
+  ]
 }

@@ -11,7 +11,7 @@ import type { LanguageModel } from "ai";
  */
 export interface ChatModel {
   model: LanguageModel;
-  /** Stable id used in cache keys and eval reports, e.g. "groq:llama-3.3-70b-versatile". */
+  /** Stable id used in cache keys and eval reports, e.g. "groq:openai/gpt-oss-120b". */
   id: string;
 }
 
@@ -22,7 +22,7 @@ export function getChatModel(): ChatModel {
     if (!process.env.GROQ_API_KEY) {
       throw new Error("GROQ_API_KEY is not set (or use LLM_PROVIDER=ollama for a local model)");
     }
-    const name = process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile";
+    const name = process.env.GROQ_MODEL ?? "openai/gpt-oss-120b";
     return { model: createGroq()(name), id: `groq:${name}` };
   }
 
