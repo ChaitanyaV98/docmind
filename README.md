@@ -41,7 +41,7 @@ Ask:     question ─► search as this user ─► top passages ─► LLM writ
 ```
 
 1. **Search uses two methods together.** One matches by meaning (*"doctor's note"* finds *"medical certificate"*), the other by exact words (`ERR-5310`). Their rankings are combined with Reciprocal Rank Fusion.
-2. **The database enforces access.** Postgres row-level security filters every query by user, so a bug in the app code can't expose someone else's documents to the AI.
+2. **The database enforces access.** Postgres row-level security filters every query by user, so a bug in the app code can't expose someone else's documents to the AI. The app's database role can't read password hashes either: login sends Postgres a candidate hash and Postgres does the comparison.
 3. **The AI only answers from what it was given.** It gets the matching passages and must cite them.
 
 ## Tech stack
